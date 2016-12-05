@@ -1,0 +1,4 @@
+users:
+- username: user
+  password: password
+  roles: [USER, ADMIN]
