@@ -2,3 +2,17 @@
 /.classpath
 /.project
 /.settings/
+
+src/.DS_Store
+
+src/main/.DS_Store
+
+src/main/webapp/.DS_Store
+
+src/main/webapp/resources/.DS_Store
+
+src/main/webapp/resources/lib/.DS_Store
+
+src/test/.DS_Store
+
+.DS_Store

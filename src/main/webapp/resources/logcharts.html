@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <!--<link href="lib/static/js/ladda/dist/ladda-themeless.min.css" rel="stylesheet">-->
+    <link href="lib/textboard/styles.css" rel="stylesheet">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    
+        <script src="lib/iframe/iframeResizer.contentWindow.min.js" type="text/javascript"></script>
+    
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Usage'],
+          ['activity1',     11],
+          ['activity2',      2],
+          ['activity3',  2],
+          ['activity5', 2],
+          ['activity9',    7]
+        ]);
+
+        var options = {
+          title: 'Activities'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="piechart" style="width: 900px; height: 500px;"></div>
+  </body>
+
+</div>
+
+</body>
+</html>

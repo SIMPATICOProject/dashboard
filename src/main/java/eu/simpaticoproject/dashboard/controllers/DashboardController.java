@@ -34,4 +34,9 @@ public class DashboardController {
 	public String login() {
 		return "login";
 	}
+	
+	@RequestMapping("/logcharts")
+	public String textboard() {
+		return "logcharts";
+	}
 }
