@@ -1,12 +1,22 @@
 $(document).ready(function () {
    // Get info for the svg image
   var eserviceId = "96949573-5ba3-438d-b2dd-68c4fc41a8b7";
+  getSVGImage(eserviceId);
+  
+  // Select function when eservice changes
+  $('#eservice').change(function () {
+    var id = $('#eservice option:selected').val();
+    getSVGImage(id);
+  });
+});
+
+function getSVGImage (eserviceId) {
   $.get("https://simpatico.business-engineering.it/cpd/api/diagram/eService/"+eserviceId+"/summary", function (data) {
     console.log(data);
     // Set image's source url
     $('#svg-eservice').attr("src", data.svg);
   })
-});
+}
 
 // Google charts
 //google.charts.load('current', {'packages':['corechart']});
