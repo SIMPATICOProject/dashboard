@@ -1,5 +1,16 @@
-google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(getDataFromAPI); // It will be called after the page finishes loading
+$(document).ready(function () {
+   // Get info for the svg image
+  var eserviceId = "96949573-5ba3-438d-b2dd-68c4fc41a8b7";
+  $.get("https://simpatico.business-engineering.it/cpd/api/diagram/eService/"+eserviceId+"/summary", function (data) {
+    console.log(data);
+    // Set image's source url
+    $('#svg-eservice').attr("src", data.svg);
+  })
+});
+
+// Google charts
+//google.charts.load('current', {'packages':['corechart']});
+//google.charts.setOnLoadCallback(getDataFromAPI); // It will be called after the page finishes loading
 
 function getDataFromAPI() {
   $.get('https://213.98.52.219:4570/simpatico/api/analytics/find?sortdesc&words=time_per_tab&limit=1', function (data) {
