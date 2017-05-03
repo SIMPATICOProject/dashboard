@@ -51,5 +51,19 @@ window.SwaggerTranslator.learn({
     "Finished Loading Resource Information. Rendering Swagger UI":"Finished Loading Resource Information. Rendering Swagger UI",
     "Unable to read api":"Unable to read api",
     "from path":"from path",
-    "server returned":"server returned"
+    "server returned":"server returned",
+    
+    "Servicio": "Service",
+    "Estadísticas": "Statistics",
+    "Preguntas en Ctzp": "Ctzp questions",
+    "Fase 1": "Step 1",
+    "Fase 2": "Step 2",
+    "Fase 3": "Step 3",
+    "Simplificaciones": "Simplifications",
+    "Satisfacción simplificaciones": "Simplifications satisfaction",
+    "Satisfacción citizenpedia": "Citizenpedia satisfaction",
+    "Satisfacción global": "Global satisfaction",
+    "Tiempo medio": "Average Time",
+    "Media de palabras en comentarios": "Average number of words in comments",
+    "30 palabras": "30 words"
 });

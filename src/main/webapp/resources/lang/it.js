@@ -48,5 +48,19 @@ window.SwaggerTranslator.learn({
     "Finished Loading Resource Information. Rendering Swagger UI":"Lettura informazioni risorse termianta. Swagger UI viene mostrata",
     "Unable to read api":"Impossibile leggere la api",
     "from path":"da cartella",
-    "server returned":"il server ha restituito"
+    "server returned":"il server ha restituito",
+    
+    "Servicio": "Servizi",
+    "Estadísticas": "Statistiche",
+    "Preguntas en Ctzp": "Domande Ctzp",
+    "Fase 1": "Passo 1",
+    "Fase 2": "Passo 2",
+    "Fase 3": "Passo 3",
+    "Simplificaciones": "Semplificazioni",
+    "Satisfacción simplificaciones": "Soddisfazione delle semplificazioni",
+    "Satisfacción citizenpedia": "Soddisfazione delle citizenpedia",
+    "Satisfacción global": "Soddisfazione globale",
+    "Tiempo medio": "Tempo medio",
+    "Media de palabras en comentarios": "Numero medio di parole nei commenti",
+    "30 palabras": "30 parole"
 });

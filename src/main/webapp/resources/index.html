@@ -64,6 +64,10 @@ code {
 .navbar-brand {
     padding: 0 15px 0 15px;
 }
+
+.flag-lang {
+	width: 20px;
+}
 </style>
 <script type="application/javascript">
 /* 
@@ -101,6 +105,9 @@ code {
 					<li ng-class="{'active':main.view =='enrich'}"><a ng-click="main.view = 'enrich'">Enrichment engine data</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#" ng-click="main.lang = 'en'"><img src="images/flag-uk.png" class="flag-lang"></a></li>
+					<li><a href="#" ng-click="main.lang = 'es'"><img src="images/flag-sp.png" class="flag-lang"></a></li>
+					<li><a href="#" ng-click="main.lang = 'it'"><img src="images/flag-it.png" class="flag-lang"></a></li>
 					<li><a href="logout">Logout</a></li>
 				</ul>
 			</div>

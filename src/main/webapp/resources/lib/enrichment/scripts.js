@@ -1,5 +1,18 @@
 $(document).ready(function () {
-   // Get info for the svg image
+  // Get language and load script for it
+  var lang = getQueryStringValue("lang");
+  $.getScript("lang/"+lang+".js")
+    .done(function (script, textStatus) {
+      // i18n
+      if(window.SwaggerTranslator) {
+        window.SwaggerTranslator.translate();
+      }
+    })
+    .fail(function (jqxhr, settings, exception) {
+      console.log(exception);
+    });
+  
+  // Get info for the svg image
   var eserviceId = "96949573-5ba3-438d-b2dd-68c4fc41a8b7";
   getSVGImage(eserviceId);
   
@@ -16,6 +29,10 @@ function getSVGImage (eserviceId) {
     // Set image's source url
     $('#svg-eservice').attr("src", data.svg);
   })
+}
+
+function getQueryStringValue (key) {  
+  return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));  
 }
 
 // Google charts

@@ -16,7 +16,6 @@
 package eu.simpaticoproject.dashboard.controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -42,7 +41,7 @@ public class DashboardController {
 	}
 	
 	@RequestMapping("/enrichment")
-	public String enrichment(Model model) {
+	public String enrichment() {
 		return "enrichment";
 	}
 }
