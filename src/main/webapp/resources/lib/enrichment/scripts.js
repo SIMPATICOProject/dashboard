@@ -1,6 +1,6 @@
 $(document).ready(function () {
   // Get language and load script for it
-  var lang = getQueryStringValue("lang");
+  var lang = getQueryStringValue("lang"); // Query string of the iframe's url, not the browser's
   $.getScript("lang/"+lang+".js")
     .done(function (script, textStatus) {
       // i18n
