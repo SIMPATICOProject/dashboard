@@ -6,7 +6,7 @@ Dashboard is a decision support system that provides different layers of informa
 - J2EE Servlet Container (Tomcat 7+)
 - Java IDE (Eclipse)
 
-## Instalation
+## Installation
 1. Export the project as a WAR file
 2. Deploy WAR file into Tomcat webapps folder
 	
