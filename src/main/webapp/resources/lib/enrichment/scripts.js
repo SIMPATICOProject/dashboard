@@ -1,6 +1,7 @@
 $(document).ready(function () {
   // Get SIMPATICO api url from controller
   var globalURL = parent.angular.element(parent.document.querySelector('[ng-controller="MainController as main"]')).scope().main.simpaticoURL;
+  var ctzURL = parent.angular.element(parent.document.querySelector('[ng-controller="MainController as main"]')).scope().main.ctzURL;
   
   // Get language and load script for it
   var lang = getQueryStringValue("lang"); // Query string of the iframe's url, not the browser's
@@ -27,11 +28,21 @@ $(document).ready(function () {
   
   // Change between real and custom data
   $('#customData').click(function () {
-    $(this).html("Change to custom data");
-    // Satisfaction
-    getSatisfaction(globalURL);
-    // Averages
-    getAverages(globalURL);
+    if ($(this).hasClass("toCustom")) {
+      // Reload the iframe
+      parent.document.getElementById("iFrameResizer0").contentDocument.location.reload(true);
+    } else {
+      $(this).html(window.SwaggerTranslator._tryTranslate("Cambiar a datos de prueba"));
+      $(this).addClass("toCustom");
+      // Satisfaction
+      getSatisfaction(globalURL);
+      // Averages
+      getAverages(globalURL);
+      // Ctzpedia stats
+      getCtzQuestions(ctzURL, eserviceId);
+      // Simplifications stats
+      getSimplStats();
+    }
   });
 });
 
@@ -112,6 +123,22 @@ function getAverages (url) {
     totalDuration = Math.round(totalDuration * 100) / 100 // 2 decimals only
     $('#averageTime').html(totalDuration + " sec");
   });
+}
+
+// Stats
+function getCtzQuestions (url, eservice) {
+  $.get(url+'/questions/'+eservice, function (data) {
+    $('#ctz-questions-1').html(data);
+    $('#ctz-questions-2').html(0); // No data available
+    $('#ctz-questions-3').html(0); // No data available
+  });
+}
+
+function getSimplStats () {
+  // TODO: No data available
+  $('#simpl-1').html(0);
+  $('#simpl-2').html(0);
+  $('#simpl-3').html(0);
 }
 
 function percentageChangeClass (elem, percentage) {

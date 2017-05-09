@@ -15,5 +15,7 @@ Inside `src/main/resources` the are 2 files to review:
 - dasboard.properties: includes general configuration
 - users.yml: includes the user to log in
 
+In order for the tab `Enrichment engine data` to work properly, open the file `src/main/webapp/resources/js/app.js` and change the `simpaticoURL` to your LOG server address.
+
 ## i18n
 In order to translate everything to different languages follow the steps inside file `src/main/webapp/resources/lang/translator.js`, in the big comment at the top.

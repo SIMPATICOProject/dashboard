@@ -65,5 +65,7 @@ window.SwaggerTranslator.learn({
     "Satisfacción global": "Global satisfaction",
     "Tiempo medio": "Average Time",
     "Media de palabras en comentarios": "Average number of words in comments",
-    "30 palabras": "30 words"
+    "30 palabras": "30 words",
+    "Cambiar a datos reales": "Change to real data",
+    "Cambiar a datos de prueba": "Change to custom data"
 });
