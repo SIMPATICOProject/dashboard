@@ -7,6 +7,8 @@ angular.module('dashboard', ["ngIframeResizer"])
     main.getEnrichmentUrl = function () {
       return "enrichment?lang=" + main.lang;
     };
+    
+    main.simpaticoURL = "https://simpatico.hi-iberia.es:4570/simpatico/api";
 })
 
 ;

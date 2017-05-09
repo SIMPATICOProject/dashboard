@@ -15,7 +15,8 @@
 	<script type="text/javascript" src="//www.gstatic.com/charts/loader.js"></script>
 	<script src="lib/iframe/iframeResizer.contentWindow.min.js" type="text/javascript"></script>
 	<script src="lang/translator.js" type='text/javascript'></script><!-- Language selection inside lib/enrichment/scripts.js -->
-	
+	<!-- AngularJS -->
+	<script src="lib/angular/angular.min.js"></script>
 	<script type="text/javascript" src="lib/enrichment/scripts.js"></script>
 </head>
 <body>
@@ -78,7 +79,7 @@
 		<div class="row-fluid form-group">
 			<h5><b data-sw-translate>Satisfacción simplificaciones</b></h5>
 			<div class="progress">
-				<div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 89%;">
+				<div id="bar-simpl-satisfaction" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 89%;">
 					89%
 				</div>
 			</div>
@@ -86,7 +87,7 @@
 		<div class="row-fluid form-group">
 			<h5><b data-sw-translate>Satisfacción citizenpedia</b></h5>
 			<div class="progress">
-				<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 12%;">
+				<div id="bar-ctz-satisfaction" class="progress-bar progress-bar-danger" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 12%;">
 					12%
 				</div>
 			</div>
@@ -94,7 +95,7 @@
 		<div class="row-fluid form-group">
 			<h5><b data-sw-translate>Satisfacción global</b></h5>
 			<div class="progress">
-				<div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 31%;">
+				<div id="bar-global-satisfaction" class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 31%;">
 					31%
 				</div>
 			</div>
@@ -104,13 +105,18 @@
 				<table class="table table-condensed table-responsive">
 					<tr>
 						<td><b data-sw-translate>Tiempo medio</b></td>
-						<td>422 sec</td>
+						<td id="averageTime">422 sec</td>
 					</tr>
 					<tr>
 						<td><b data-sw-translate>Media de palabras en comentarios</b></td>
 						<td data-sw-translate>30 palabras</td>
 					</tr>
 				</table>
+			</div>
+		</div>
+		<div class="row-fluid form-group">
+			<div class="col-md-2 col-md-offset-10">
+				<button id="customData" class="btn btn-default">Change to real data</button>
 			</div>
 		</div>
 		<div id="date_info"></div>
