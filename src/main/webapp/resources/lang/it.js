@@ -62,7 +62,7 @@ window.SwaggerTranslator.learn({
     "Satisfacción global": "Soddisfazione globale",
     "Tiempo medio": "Tempo medio",
     "Media de palabras en comentarios": "Numero medio di parole nei commenti",
-    "30 palabras": "30 parole",
+    "palabras": "parole",
     "Cambiar a datos reales": "Passare a dati reali",
     "Cambiar a datos de prueba": "Passa a dati di test"
 });

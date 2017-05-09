@@ -32,6 +32,7 @@ $(document).ready(function () {
       // Reload the iframe
       parent.document.getElementById("iFrameResizer0").contentDocument.location.reload(true);
     } else {
+      // Get real data
       $(this).html(window.SwaggerTranslator._tryTranslate("Cambiar a datos de prueba"));
       $(this).addClass("toCustom");
       // Satisfaction
@@ -40,8 +41,6 @@ $(document).ready(function () {
       getAverages(globalURL);
       // Ctzpedia stats
       getCtzQuestions(ctzURL, eserviceId);
-      // Simplifications stats
-      getSimplStats();
     }
   });
 });
@@ -66,11 +65,13 @@ function getSatisfaction (url) {
   $.get(url+'/logs/find?words=session-feedback', function (data) {
     var simpCount = 0;
     var ctzCount = 0;
+    var averageWordsCount = 0;
     
     var paragraphSatisf = 0;
     var phraseSatisf = 0;
     var wordSatisf = 0;
     var ctzSatisf = 0;
+    var wordsComments = 0;
     data.results.forEach(function (doc) {
       if (doc.data.slider_session_feedback_paragraph !== undefined) {
         paragraphSatisf += parseInt(doc.data.slider_session_feedback_paragraph);
@@ -82,6 +83,19 @@ function getSatisfaction (url) {
       if (doc.data.slider_session_feedback_ctz !== undefined) {
         ctzSatisf += parseInt(doc.data.slider_session_feedback_ctz) + 5; // [-5,5] to [0-10]
         ctzCount++;
+      }
+      
+      // average number of words in comments
+      if (doc.data["session-feedback-comments-text"] !== undefined) {
+        var wordsArr = doc.data["session-feedback-comments-text"].split(" ");
+        wordsComments += wordsArr.length;
+        averageWordsCount++;
+        
+      }
+      if (doc.data["session-feedback-timeout-text"] !== undefined) {
+        var wordsArr = doc.data["session-feedback-timeout-text"].split(" ");
+        wordsComments += wordsArr.length;
+        averageWordsCount++;
       }
     });
     
@@ -107,6 +121,16 @@ function getSatisfaction (url) {
     progressbarGlobal.html(globalSatisf + "%");
     progressbarGlobal.css('width', globalSatisf + "%");
     percentageChangeClass(progressbarGlobal, globalSatisf);
+    
+    // Average number of words
+    var averageTotal = wordsComments / averageWordsCount;
+    averageTotal = Math.round(averageTotal * 100) / 100 // 2 decimals only
+    $('#averageWords').html(averageTotal);
+    
+    // Simplification stats -> number of times simplification was used == number of feedbacks with simplification form
+    $('#simpl-1').html(simpCount);
+    $('#simpl-2').html(0); // No data available
+    $('#simpl-3').html(0); // No data available
   });
 }
 
@@ -121,7 +145,13 @@ function getAverages (url) {
     
     totalDuration = (totalDuration / 1000) / count;
     totalDuration = Math.round(totalDuration * 100) / 100 // 2 decimals only
-    $('#averageTime').html(totalDuration + " sec");
+    if (totalDuration > 120) { // if more than 120 seconds, show it in minutes
+      totalDuration = totalDuration / 60;
+      totalDuration = Math.round(totalDuration * 100) / 100 // 2 decimals only
+      $('#averageTime').html(totalDuration + " min");
+    } else {
+      $('#averageTime').html(totalDuration + " sec");
+    }
   });
 }
 
@@ -132,13 +162,6 @@ function getCtzQuestions (url, eservice) {
     $('#ctz-questions-2').html(0); // No data available
     $('#ctz-questions-3').html(0); // No data available
   });
-}
-
-function getSimplStats () {
-  // TODO: No data available
-  $('#simpl-1').html(0);
-  $('#simpl-2').html(0);
-  $('#simpl-3').html(0);
 }
 
 function percentageChangeClass (elem, percentage) {
