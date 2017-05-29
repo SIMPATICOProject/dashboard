@@ -37,11 +37,21 @@ $(document).ready(function () {
 });
 
 function getSVGImage (cpdURL, eserviceId) {
-  $.get(cpdURL+"/api/diagram/eService/"+eserviceId+"/summary", function (data) {
-    console.log(data);
-    // Set image's source url
-    $('#svg-eservice').attr("src", data.svg);
-  })
+  $.get(cpdURL+"/api/diagram/summary/list", function (data) {
+    data.forEach(function (service) {
+      if (service.id == eserviceId) {
+        // Set image's source url
+        $('#svg-eservice').attr("src", service.svg);
+      }
+    });
+  });
+  
+  // TODO: Not working anymore? It returns null
+//  $.get(cpdURL+"/api/diagram/eService/"+eserviceId+"/summary", function (data) {
+//    console.log(data);
+//    // Set image's source url
+//    $('#svg-eservice').attr("src", data.svg);
+//  })
 }
 
 function getQueryStringValue (key) {  
