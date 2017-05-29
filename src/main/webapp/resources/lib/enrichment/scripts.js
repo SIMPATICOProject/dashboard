@@ -2,6 +2,7 @@ $(document).ready(function () {
   // Get SIMPATICO api url from controller
   var globalURL = parent.angular.element(parent.document.querySelector('[ng-controller="MainController as main"]')).scope().main.simpaticoURL;
   var ctzURL = parent.angular.element(parent.document.querySelector('[ng-controller="MainController as main"]')).scope().main.ctzURL;
+  var cpdURL = parent.angular.element(parent.document.querySelector('[ng-controller="MainController as main"]')).scope().main.cpdURL;
   
   // Get language and load script for it
   var lang = getQueryStringValue("lang"); // Query string of the iframe's url, not the browser's
@@ -17,36 +18,26 @@ $(document).ready(function () {
     });
   
   // Get info for the svg image
-  var eserviceId = "96949573-5ba3-438d-b2dd-68c4fc41a8b7";
-  getSVGImage(eserviceId);
+  var eserviceId = "60cc24d0-bb36-4580-9150-ee62eb32ab7a";
+  getSVGImage(cpdURL, eserviceId);
   
   // Select function when eservice changes
   $('#eservice').change(function () {
     var id = $('#eservice option:selected').val();
-    getSVGImage(id);
+    getSVGImage(cpdURL, id);
   });
   
-  // Change between real and custom data
-  $('#customData').click(function () {
-    if ($(this).hasClass("toCustom")) {
-      // Reload the iframe
-      parent.document.getElementById("iFrameResizer0").contentDocument.location.reload(true);
-    } else {
-      // Get real data
-      $(this).html(window.SwaggerTranslator._tryTranslate("Cambiar a datos de prueba"));
-      $(this).addClass("toCustom");
-      // Satisfaction
-      getSatisfaction(globalURL);
-      // Averages
-      getAverages(globalURL);
-      // Ctzpedia stats
-      getCtzQuestions(ctzURL, eserviceId);
-    }
-  });
+  // Get real data
+//Satisfaction
+  getSatisfaction(globalURL);
+  // Averages
+  getAverages(globalURL);
+  // Ctzpedia stats
+  getCtzQuestions(ctzURL, eserviceId);
 });
 
-function getSVGImage (eserviceId) {
-  $.get("https://simpatico.business-engineering.it/cpd/api/diagram/eService/"+eserviceId+"/summary", function (data) {
+function getSVGImage (cpdURL, eserviceId) {
+  $.get(cpdURL+"/api/diagram/eService/"+eserviceId+"/summary", function (data) {
     console.log(data);
     // Set image's source url
     $('#svg-eservice').attr("src", data.svg);
