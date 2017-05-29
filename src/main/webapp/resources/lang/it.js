@@ -56,6 +56,7 @@ window.SwaggerTranslator.learn({
     "Fase 1": "Passo 1",
     "Fase 2": "Passo 2",
     "Fase 3": "Passo 3",
+    "Fase 4": "Passo 4",
     "Simplificaciones": "Semplificazioni",
     "Satisfacción simplificaciones": "Soddisfazione delle semplificazioni",
     "Satisfacción citizenpedia": "Soddisfazione delle citizenpedia",

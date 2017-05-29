@@ -132,6 +132,7 @@ function getSatisfaction (url) {
     $('#simpl-1').html(simpCount);
     $('#simpl-2').html(0); // No data available
     $('#simpl-3').html(0); // No data available
+    $('#simpl-4').html(0); // No data available
   });
 }
 
@@ -162,6 +163,7 @@ function getCtzQuestions (url, eservice) {
     $('#ctz-questions-1').html(data);
     $('#ctz-questions-2').html(0); // No data available
     $('#ctz-questions-3').html(0); // No data available
+    $('#ctz-questions-4').html(0); // No data available
   });
 }
 
