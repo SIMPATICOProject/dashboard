@@ -1,3 +1,4 @@
+var eservices = [];
 $(document).ready(function () {
   // Get SIMPATICO api url from controller
   var globalURL = parent.angular.element(parent.document.querySelector('[ng-controller="MainController as main"]')).scope().main.simpaticoURL;
@@ -17,33 +18,53 @@ $(document).ready(function () {
       console.log(exception);
     });
   
-  // Get info for the svg image
-  var eserviceId = "60cc24d0-bb36-4580-9150-ee62eb32ab7a";
-  getSVGImage(cpdURL, eserviceId);
-  
-  // Select function when eservice changes
-  $('#eservice').change(function () {
-    var id = $('#eservice option:selected').val();
+  fillEservices(cpdURL, function (service) {
+    // Fill the info with the first eservice returned
+    var id = service.id;
     getSVGImage(cpdURL, id);
+    // Get real data
+    //Satisfaction
+    getSatisfaction(globalURL);
+    // Averages
+    getAverages(globalURL);
+    // Ctzpedia stats
+    getCtzQuestions(ctzURL, id);
   });
   
-  // Get real data
-//Satisfaction
-  getSatisfaction(globalURL);
-  // Averages
-  getAverages(globalURL);
-  // Ctzpedia stats
-  getCtzQuestions(ctzURL, eserviceId);
+  // Select function when eservice changes
+  $('#eservices').change(function () {
+    var id = $('#eservices option:selected').val();
+    getSVGImage(cpdURL, id);
+    // Get real data
+    //Satisfaction
+    getSatisfaction(globalURL);
+    // Averages
+    getAverages(globalURL);
+    // Ctzpedia stats
+    getCtzQuestions(ctzURL, id);
+  });  
 });
 
-function getSVGImage (cpdURL, eserviceId) {
+function fillEservices(cpdURL, cb) {
   $.get(cpdURL+"/api/diagram/summary/list", function (data) {
+    var select = $('#eservices');
+    var first;
     data.forEach(function (service) {
-      if (service.id == eserviceId) {
-        // Set image's source url
-        $('#svg-eservice').attr("src", service.svg);
-      }
+      if (first == null) first = service;
+      select.append($('<option></option').val(service.id).html(service.name));
+      // Cache the service in the global variable
+      eservices.push(service);
     });
+    cb(first);
+  });
+}
+
+function getSVGImage (cpdURL, eserviceId) {
+  $.each(eservices, function (index, service) {
+    if (service.id == eserviceId) {
+      // Set image's source url
+      $('#svg-eservice').attr("src", service.svg);
+    }
   });
   
   // TODO: Not working anymore? It returns null
