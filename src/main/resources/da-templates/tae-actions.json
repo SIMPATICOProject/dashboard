@@ -1,0 +1,9 @@
+{
+  "aggs": {
+    "actions" : {
+      "terms" : {
+        "field":"action.keyword"
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "aggs": {
+    "text-sat": {
+      "scripted_metric": {
+        "init_script": "params._agg.values = []",
+        "map_script": "long c = 0; long s = 0; if (!doc.slider_session_feedback_phrase.empty) { c++; s += doc.slider_session_feedback_phrase.value;} if (!doc.slider_session_feedback_word.empty) { c++; s += doc.slider_session_feedback_word.value;} if (!doc.slider_session_feedback_paragraph.empty) { c++; s += doc.slider_session_feedback_paragraph.value;} if (c > 0) params._agg.values.add(s/c);",
+        "combine_script": "double s = 0; for (v in params._agg.values) { s += v / params._agg.values.length } return params._agg.values.length > 0 ? s : null ",
+        "reduce_script": "long c = 0; double s = 0; for (v in params._aggs) { if (v != null) {s += v; c++;} } return c > 0 ? s / c : null"
+      }
+    },
+    "ctz-sat": {
+      "scripted_metric": {
+        "init_script": "params._agg.values = []",
+        "map_script": "if (!doc.slider_session_feedback_ctz.empty) params._agg.values.add(doc.slider_session_feedback_ctz.value);",
+        "combine_script": "double s = 0; for (v in params._agg.values) { s += v / params._agg.values.length } return params._agg.values.length > 0 ? s : null ",
+        "reduce_script": "long c = 0; double s = 0; for (v in params._aggs) { if (v != null) {s += v; c++;} } return c > 0 ? s / c : null"
+      }
+    },
+    "faces" : {
+      "filters" : {
+        "filters" : {
+          "happy": { "match" : { "faces-session-feedback" : "happy"   }},
+          "sad": { "match" : { "faces-session-feedback" : "sad" }},
+          "normal": { "match" : { "faces-session-feedback" : "normal" }}
+        }
+      }
+    }
+  }
+} 

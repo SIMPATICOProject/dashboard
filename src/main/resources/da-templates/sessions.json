@@ -1,0 +1,9 @@
+{
+  "aggs": {
+    "avg_duration" : {
+      "avg" : {
+        "field":"duration"
+      }
+    }
+  }
+}

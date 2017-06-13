@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "slider_session_feedback_paragraph": {
+      "type": "long"
+    },
+    "slider_session_feedback_word": {
+      "type": "long"
+    },
+    "slider_session_feedback_phrase": {
+      "type": "long"
+    },
+    "slider_session_feedback_ctz": {
+      "type": "long"
+    }
+  }
+}

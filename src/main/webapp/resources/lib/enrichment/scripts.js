@@ -1,5 +1,7 @@
-var eservices = [];
+var procedures = {};
 $(document).ready(function () {
+  google.charts.load("current", {packages:["corechart"]});
+	
   // Get SIMPATICO api url from controller
   var globalURL = parent.angular.element(parent.document.querySelector('[ng-controller="MainController as main"]')).scope().main.simpaticoURL;
   var ctzURL = parent.angular.element(parent.document.querySelector('[ng-controller="MainController as main"]')).scope().main.ctzURL;
@@ -7,6 +9,30 @@ $(document).ready(function () {
   
   // Get language and load script for it
   var lang = getQueryStringValue("lang"); // Query string of the iframe's url, not the browser's
+  
+  var setProcedure = function(pId){
+	    getSVGImage(cpdURL, pId);
+	    fillEservices(pId, setEservice);
+  }
+
+  var setEservice = function(eServiceId) {
+    // Get real data
+    // Ctzpedia stats
+    getCtzQuestions(ctzURL, eServiceId);
+    // Ctzpedia stats
+    getCtzStats(eServiceId);
+    // TAE stats
+    getTAEStats(eServiceId);
+    // WAE stats
+    getWAEStats(eServiceId);
+    // CDV stats
+    getCDVStats(eServiceId);
+    // Session data
+    getSessionStats(eServiceId);
+    //Satisfaction
+    getSatisfaction(eServiceId);
+  }
+  
   $.getScript("lang/"+lang+".js")
     .done(function (script, textStatus) {
       // i18n
@@ -18,69 +44,171 @@ $(document).ready(function () {
       console.log(exception);
     });
   
-  fillEservices(cpdURL, function (service) {
-    // Fill the info with the first eservice returned
-    var id = service.id;
-    getSVGImage(cpdURL, id);
-    // Get real data
-    //Satisfaction
-    getSatisfaction(globalURL);
-    // Averages
-    getAverages(globalURL);
-    // Ctzpedia stats
-    getCtzQuestions(ctzURL, id);
-  });
+  fillProcedures(cpdURL, setProcedure);
+  
+  // Select function when procedure changes
+  $('#procedures').change(function () {
+    var id = $('#procedures option:selected').val();
+    setProcedure(id);
+  });  
   
   // Select function when eservice changes
   $('#eservices').change(function () {
     var id = $('#eservices option:selected').val();
-    getSVGImage(cpdURL, id);
-    // Get real data
-    //Satisfaction
-    getSatisfaction(globalURL);
-    // Averages
-    getAverages(globalURL);
-    // Ctzpedia stats
-    getCtzQuestions(ctzURL, id);
+    setEservice(id);
   });  
 });
 
-function fillEservices(cpdURL, cb) {
+function fillProcedures(cpdURL, cb) {
   $.get(cpdURL+"/api/diagram/summary/list", function (data) {
-    var select = $('#eservices');
+    var select = $('#procedures');
     var first;
-    data.forEach(function (service) {
-      if (first == null) first = service;
-      select.append($('<option></option').val(service.id).html(service.name));
+    data.sort(function(a,b){
+    	return a.name.localeCompare(b.name);
+    });
+    data.forEach(function (procedure) {
+      if (first == null) first = procedure.diagramId;
+      select.append($('<option></option').val(procedure.diagramId).html(procedure.name));
       // Cache the service in the global variable
-      eservices.push(service);
+      procedures[procedure.diagramId] = procedure;
     });
     cb(first);
   });
 }
+function fillEservices(id, cb) {
+	var procedure = procedures[id];
+	var select = $('#eservices');
+    var first = null;
+    select.find('option').remove();
+    procedure.phases.forEach(function (phase) {
+      if (phase.eServiceId == null) return;
+      
+      if (first == null) first = phase.eServiceId;
+      select.append($('<option></option').val(phase.eServiceId).html(phase.name));
+    });
+    cb(first);
+}
 
-function getSVGImage (cpdURL, eserviceId) {
-  $.each(eservices, function (index, service) {
-    if (service.id == eserviceId) {
-      // Set image's source url
-      $('#svg-eservice').attr("src", service.svg);
-    }
-  });
-  
-  // TODO: Not working anymore? It returns null
-//  $.get(cpdURL+"/api/diagram/eService/"+eserviceId+"/summary", function (data) {
-//    console.log(data);
-//    // Set image's source url
-//    $('#svg-eservice').attr("src", data.svg);
-//  })
+function getSVGImage (cpdURL, procedureId) {	
+    $('#svg-eservice').attr("src", cpdURL+"/assets/svg/"+procedureId+".svg");
 }
 
 function getQueryStringValue (key) {  
   return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));  
 }
 
+//CTZP questions
+function getCtzQuestions (url, eservice) {
+  $.get(url+'/questions/'+eservice, function (data) {
+    $('#ctz-questions').html(data);
+  });
+}
+//CTZP stats
+function getCtzStats(eservice) {
+	  $.get('./da/ctzp/'+eservice, function (data) {
+		  data.aggregations.events.buckets.forEach(function(b){
+			    $('#ctz-'+b.key).html(b.doc_count);
+		  });
+	  });
+}
+//TAE
+function getTAEStats(eservice) {
+	  $.get('./da/tae/'+eservice, function (data) {
+		  data.aggregations.events.buckets.forEach(function(b){
+			    $('#tae-'+b.key).html(b.doc_count);
+		  });
+	  });
+	  $.get('./da/tae/'+eservice+'/actions', function (data) {
+		  data.aggregations.actions.buckets.forEach(function(b){
+			    $('#tae-action-'+b.key).html(b.doc_count);
+		  });
+	  });
+}
+//WAE
+function getWAEStats(eservice) {
+	  $.get('./da/wae/'+eservice, function (data) {
+		  data.aggregations.events.buckets.forEach(function(b){
+			    $('#wae-'+b.key).html(b.doc_count);
+		  });
+	  });
+}
+//CDV
+function getCDVStats(eservice) {
+	  $.get('./da/cdv/'+eservice, function (data) {
+		  data.aggregations.events.buckets.forEach(function(b){
+			    $('#cdv-'+b.key).html(b.doc_count);
+		  });
+		  data.aggregations.actions.buckets.forEach(function(b){
+			    $('#cdv-action-'+b.key).html(b.doc_count);
+		  });
+	  });
+}
+//Sessions
+function getSessionStats(eservice) {
+	  $.get('./da/sessions/'+eservice, function (data) {
+		  $('#sessions-number').html(data.hits.total);
+		  $('#sessions-avg_duration').html(moment().startOf('day').add(data.aggregations.avg_duration.value,'ms').format('H[h] m[min] s[sec]'));
+	  });
+}
+//Satisfactions
+function getSatisfaction(eservice){
+	  $.get('./da/satisfaction/'+eservice, function (stats) {
+		  
+	      var chart = new google.visualization.BarChart(document.getElementById("tae-satisfaction"));
+	      var taeData = google.visualization.arrayToDataTable([
+	    	  ['sat', 'value'],
+	    	  ['', stats.aggregations['text-sat'].value+5]
+	      ]);	  
+		  var view = new google.visualization.DataView(taeData);
+	      var options = {
+	              height: 100,
+	              legend: {position: 'none'},
+	              hAxis: {
+	                minValue: 0,
+	                maxValue: 10
+	              },
+	              chartArea:{width: '100%'} 
+	      };
+	      chart.draw(view, options);
+
+	      chart = new google.visualization.BarChart(document.getElementById("ctzp-satisfaction"));
+	      var ctzpData = google.visualization.arrayToDataTable([
+	    	  ['sat', 'value'],
+	    	  ['', stats.aggregations['ctz-sat'].value+5]
+	      ]);	  
+		  view = new google.visualization.DataView(ctzpData);
+	      chart.draw(view, options);
+	      
+		  var faces = stats.aggregations.faces.buckets;
+		  var faceData = google.visualization.arrayToDataTable([
+		        ['none', 'sad', 'normal', 'happy', { role: 'annotation' } ],
+		        ['', faces.sad.doc_count, faces.normal.doc_count, faces.happy.doc_count, '']
+		      ]);
+		  
+		  view = new google.visualization.DataView(faceData);
+
+	      var facesOptions = {
+	    		  isStacked: 'percent',
+	    		  height: 100,
+	              legend: {position: 'none'},
+	              hAxis: {
+	                minValue: 0,
+	                ticks: [0, .25, .5, .75, 1]
+	              }, 
+	              series:  {
+			    	  0:{color:'red'},
+			      	  1:{color:'yellow'},
+			      	  2:{color:'green'}
+	              },
+	              chartArea:{width: '100%'} 
+	      };
+	      chart = new google.visualization.BarChart(document.getElementById("faces"));
+	      chart.draw(view, facesOptions);
+	  });
+}
+
 // Satisfactions
-function getSatisfaction (url) {
+function getSatisfactionOld (url) {
   // Considerating every simplification: paragraph, sentence and word
   // Values from -5 to 5 -> -5 = 0%, 0 = 50%, 5 = 100%
   // TODO: This should be done server side
@@ -178,16 +306,6 @@ function getAverages (url) {
   });
 }
 
-// Stats
-function getCtzQuestions (url, eservice) {
-  $.get(url+'/questions/'+eservice, function (data) {
-    $('#ctz-questions-1').html(data);
-    $('#ctz-questions-2').html(0); // No data available
-    $('#ctz-questions-3').html(0); // No data available
-    $('#ctz-questions-4').html(0); // No data available
-  });
-}
-
 function percentageChangeClass (elem, percentage) {
   if (percentage < 30) {
     elem.removeClass();
@@ -201,94 +319,3 @@ function percentageChangeClass (elem, percentage) {
   }
 }
 
-// Google charts
-//google.charts.load('current', {'packages':['corechart']});
-//google.charts.setOnLoadCallback(getDataFromAPI); // It will be called after the page finishes loading
-
-function getDataFromAPI() {
-  $.get(simpaticoAPI + '/analytics/find?sortdesc&words=time_per_tab&limit=1', function (data) {
-    drawChartTime(data);
-  });
-  
-  $.get(simpaticoAPI + '/analytics/find?words=duration_frecuency&sortdesc&limit=1', function (data) {
-    drawChartHistogram(data);
-  });
-}
-
-function drawChartTime(data) {
-  var arrTabs = new Array(5).fill(0);
-  if (data.results.length > 0) {
-    data.results[0].data.payload.forEach(function (valueTab) {
-  	  arrTabs.push(parseFloat(valueTab)); 
-    });
-  }
-  
-  var options = {
-      title: 'Visit duration per tab (in minutes)',
-      width: 500,
-      height: 400,
-      vAxis: {
-        title: 'Time (sec)'
-      }
-    };
-  
-  // Paint data (average)
-  var dataTable = google.visualization.arrayToDataTable([
-    ['Page', 'Time on Site', { role: 'style' }],
-    ['Solicitude', arrTabs[0], 'blue'],
-    ['Documentación', arrTabs[1], 'green'],
-    ['A onde acudir', arrTabs[2], 'purple'],
-    ['Obxecto', arrTabs[3], 'orange'],
-    ['Normativa', arrTabs[4], 'chocolate']
-  ]);
-
-  var chart = new google.visualization.ColumnChart(document.getElementById('chart_time'));
-  chart.draw(dataTable, options);
-}
-
-function drawChartHistogram(data) {
-  var options = {
-      title: 'Duration frequency',
-      width: 600,
-      height: 400,
-      pointSize: 4,
-      hAxis: {
-        title: 'Time (sec)'
-      },
-      vAxis: {
-        title: 'Users'
-      },
-      colors: ['blue', 'green', 'purple', 'orange', 'chocolate']
-    };
-  
-  var dataChart = google.visualization.arrayToDataTable([]);
-  var chart = new google.visualization.LineChart(document.getElementById('chart_histogram'));
-  var dateInfo = document.getElementById('date_info');
-  
-  
-  var dataPayload = new Array(5).fill(new Array(5).fill(0));
-  var dataCreated = new Date();
-  if (data.results.length > 0) {
-    dataPayload = data.results[0].data.payload;
-    dataCreated = new Date(data.results[0].data.created);
-  }
-  
-  // Crunch the data
-  var array = [[]];
-  array[0] = ['Time (sec)', 'Solicitude', 'Documentación', 'A onde acudir', 'Obxecto', 'Normativa'];
-  array.push(['0-30', dataPayload[0][0], dataPayload[1][0], dataPayload[2][0], dataPayload[3][0], dataPayload[4][0]]);
-  array.push(['30-60', dataPayload[0][1], dataPayload[1][1], dataPayload[2][1], dataPayload[3][1], dataPayload[4][1]]);
-  array.push(['60-90', dataPayload[0][2], dataPayload[1][2], dataPayload[2][2], dataPayload[3][2], dataPayload[4][2]]);
-  array.push(['90-120', dataPayload[0][3], dataPayload[1][3], dataPayload[2][3], dataPayload[3][3], dataPayload[4][3]]);
-  array.push(['+120', dataPayload[0][4], dataPayload[1][4], dataPayload[2][4], dataPayload[3][4], dataPayload[4][4]]);
-  
-  // Paint the data
-  dataChart = google.visualization.arrayToDataTable(array);
-  
-  chart.draw(dataChart, options);
-  dateInfo.innerHTML = "&nbsp;Last analysis: " + dataCreated;
-}
-
-function minToSecs(min) {
-  return min*60;
-}

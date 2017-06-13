@@ -1,0 +1,14 @@
+{
+  "aggs": {
+    "actions" : {
+      "terms" : {
+        "field":"action.keyword"
+      }
+    },
+    "events" : {
+      "terms" : {
+        "field":"event.keyword"
+      }
+    }
+  }
+}

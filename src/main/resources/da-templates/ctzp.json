@@ -1,0 +1,9 @@
+{
+  "aggs": {
+    "events" : {
+      "terms" : {
+        "field":"event.keyword"
+      }
+    }
+  }
+}

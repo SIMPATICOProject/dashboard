@@ -9,9 +9,9 @@ angular.module('dashboard', ["ngIframeResizer"])
     };
     
     // Configuration of variables for the EE tab
-    main.simpaticoURL = "https://simpatico.hi-iberia.es:4570/simpatico/api";
-    main.ctzURL = "https://simpatico.morelab.deusto.es/qae/api/stats";
-    main.cpdURL = "https://simpatico.hi-iberia.es:4570/cpd";
+    main.simpaticoURL = "https://simpatico.smartcommunitylab.it/simpatico-logs/api";
+    main.ctzURL = "https://simpatico.smartcommunitylab.it/qae/api/stats";
+    main.cpdURL = "https://simpatico.smartcommunitylab.it/cpd";
 })
 
 ;

@@ -18,115 +18,129 @@
 	<!-- AngularJS -->
 	<script src="lib/angular/angular.min.js"></script>
 	<script type="text/javascript" src="lib/enrichment/scripts.js"></script>
+      <script type="text/javascript" src="lib/moment.min.js"></script>
 </head>
 <body>
 	<div class="container">
 	<!-- NOTE: Class "row-fluid" to remove negative margins of rows. Class "form-group" to add more space between rows -->
-		<div class="row-fluid form-group">
-			<div class="form-inline">
-				<div class="form-group">
-					<label for="eservices" class="col-md-2 control-label">
-						<h4><b data-sw-translate>Servicio</b></h4>
-					</label>
-					<div class="col-md-6">
-						<select id="eservices" class="form-control">
-						</select>
-					</div>
-				</div>
-			</div>
+		<div class="form-group">
+			<label for="procedures" class="col-md-4 control-label">
+				<h4><b data-sw-translate>Procedures</b></h4>
+			</label>
+			<select id="procedures" class="form-control">
+			</select>
 		</div>
-		<div class="row-fluid form-group">
-			<img id="svg-eservice" class="img-responsive" alt="SVG eService phases" src="">
-		</div>
-		<div class="row-fluid form-group">
-			<h4><b data-sw-translate>Estadísticas</b></h4>
+	    <div class="form-group">
+	        <label for="eservices" class="col-md-4 control-label">
+	            <h4><b data-sw-translate>Services</b></h4>
+	        </label>
+            <select id="eservices" class="form-control">
+            </select>
+	    </div>
+        <div class="row-fluid form-group">
+            <img id="svg-eservice" class="img-responsive" alt="SVG eService phases" src="">
+        </div>
+
+
+
+		<div class="row form-group">
+			<h4><b data-sw-translate>Statistics</b></h4>
 			<div class="col-md-6">
-				<h5 data-sw-translate>Preguntas en Ctzp</h5>
+				<table class="table table-responsive">
+					<tr class="active"><td colspan="2"><b  data-sw-translate>Citizenpedia</b></td></tr>
+					<tr>
+						<td data-sw-translate>Questions</td>
+						<td id="ctz-questions"></td>
+					</tr>
+                    <tr>
+                        <td data-sw-translate>Content requests</td>
+                        <td id="ctz-citizenpedia_content_request"></td>
+                    </tr>
+                    <tr>
+                        <td data-sw-translate>Open existing question</td>
+                        <td id="ctz-citizenpedia_question_request"></td>
+                    </tr>
+                    <tr>
+                        <td data-sw-translate>Create new question</td>
+                        <td id="ctz-citizenpedia_new_question"></td>
+                    </tr>
+                    <tr class="active"><td colspan="2"><b data-sw-translate>WAE</b></td></tr>
+                    <tr>
+                        <td data-sw-translate>Adaptations</td>
+                        <td id="wae-workflow_adaptation_request"></td>
+                    </tr>
+                    <tr class="active"><td colspan="2"><b  data-sw-translate>CDV</b></td></tr>
+                    <tr>
+                        <td data-sw-translate>CDV Requests</td>
+                        <td id="cdv-compile_start"></td>
+                    </tr>
+                    <tr>
+                        <td data-sw-translate>Use data request</td>
+                        <td id="cdv-action-usedata"></td>
+                    </tr>
+                    <tr>
+                        <td data-sw-translate>Save data request</td>
+                        <td id="cdv-action-savedata"></td>
+                    </tr>                    
+                </table>
+			</div>
+			<div class="col-md-6">
 				<table class="table table-hover table-responsive">
+                    <tr class="active"><td colspan="2"><b  data-sw-translate>TAE</b></td></tr>
 					<tr>
-						<td data-sw-translate>Fase 1</td>
-						<td id="ctz-questions-1"></td>
+						<td data-sw-translate>Word</td>
+						<td id="tae-word_simplification"></td>
 					</tr>
-					<tr class="success">
-						<td data-sw-translate>Fase 2</td>
-						<td id="ctz-questions-2"></td>
-					</tr>
-					<tr class="danger">
-						<td data-sw-translate>Fase 3</td>
-						<td id="ctz-questions-3"></td>
-					</tr>
-					<tr>
-						<td data-sw-translate>Fase 4</td>
-						<td id="ctz-questions-4"></td>
-					</tr>
-				</table>
-			</div>
-			<div class="col-md-6">
-				<h5 data-sw-translate>Simplificaciones</h5>
-				<table class="table table-hover table-responsive">
-					<tr>
-						<td data-sw-translate>Fase 1</td>
-						<td id="simpl-1"></td>
-					</tr>
-					<tr class="success">
-						<td data-sw-translate>Fase 2</td>
-						<td id="simpl-2"></td>
-					</tr>
-					<tr class="danger">
-						<td data-sw-translate>Fase 3</td>
-						<td id="simpl-3"></td>
-					</tr>
-					<tr>
-						<td data-sw-translate>Fase 4</td>
-						<td id="simpl-4"></td>
-					</tr>
+                    <tr>
+                        <td data-sw-translate>Paragraph</td>
+                        <td id="tae-paragraph_simplification"></td>
+                    </tr>
+                    <tr>
+                        <td data-sw-translate>Free text</td>
+                        <td id="tae-free_text_simplification"></td>
+                    </tr>
+                    <tr>
+                        <td data-sw-translate>Free text synonims</td>
+                        <td><span id="tae-action-viewsimp"></span> / <span id="tae-action-dosimp"></span></td>
+                    </tr>
+                    <tr>
+                        <td data-sw-translate>Free text definitions</td>
+                        <td><span id="tae-action-viewedef"></span> / <span id="tae-action-dodef"></span></td>
+                    </tr>
+                    <tr>
+                        <td data-sw-translate>Free text Wikipedia</td>
+                        <td><span id="tae-action-viewewiki"></span> / <span id="tae-action-dowiki"></span></td>
+                    </tr>
+                    <tr class="active"><td colspan="2"><b data-sw-translate>Sessions</b></td></tr>
+                    <tr>
+                        <td data-sw-translate>Total number</td>
+                        <td id="sessions-number"></td>
+                    </tr>
+                    <tr>
+                        <td data-sw-translate>Average duration</td>
+                        <td id="sessions-avg_duration"></td>
+                    </tr>
 				</table>
 			</div>
 		</div>
+         <h4><b data-sw-translate>Session Feedback</b></h4>
+
 		<div class="row-fluid form-group">
-			<h5><b data-sw-translate>Satisfacción simplificaciones</b></h5>
-			<div class="progress">
-				<div id="bar-simpl-satisfaction" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-					
-				</div>
-			</div>
+			<h5><b data-sw-translate>TAE Satisfaction</b></h5>
+            <div id="tae-satisfaction">
+            </div>
 		</div>
 		<div class="row-fluid form-group">
-			<h5><b data-sw-translate>Satisfacción citizenpedia</b></h5>
-			<div class="progress">
-				<div id="bar-ctz-satisfaction" class="progress-bar progress-bar-danger" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-					
-				</div>
+			<h5><b data-sw-translate>Citizenpedia Satisfaction</b></h5>
+            <div id="ctzp-satisfaction">
 			</div>
 		</div>
-		<div class="row-fluid form-group">
-			<h5><b data-sw-translate>Satisfacción global</b></h5>
-			<div class="progress">
-				<div id="bar-global-satisfaction" class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-					
-				</div>
-			</div>
-		</div>
-		<div class="row-fluid form-group">
-			<div class="col-md-6">
-				<table class="table table-condensed table-responsive">
-					<tr>
-						<td><b data-sw-translate>Tiempo medio</b></td>
-						<td id="averageTime"> sec</td>
-					</tr>
-					<tr>
-						<td><b data-sw-translate>Media de palabras en comentarios</b></td>
-						<td><span id="averageWords"></span> <span data-sw-translate>palabras</span></td>
-					</tr>
-				</table>
-			</div>
-		</div>
-		<!-- <div class="row-fluid form-group">
-			<div class="col-md-2 col-md-offset-10">
-				<button id="customData" class="btn btn-default" data-sw-translate>Cambiar a datos reales</button>
-			</div>
-		</div> -->
-		<div id="date_info"></div>
+        <div class="row-fluid form-group">
+            <h5><b data-sw-translate>Overall opinion</b></h5>
+            <div id="faces">
+            </div>
+        </div>
+    
 	</div>
 </body>
 

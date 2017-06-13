@@ -30,6 +30,7 @@ window.SwaggerTranslator = {
     },
 
     _tryTranslate: function(word) {
+    	if (!!word && !this._words[$.trim(word)]) console.log('"'+word+'": "'+word+'",');
       return this._words[$.trim(word)] !== undefined ? this._words[$.trim(word)] : word;
     },
 
