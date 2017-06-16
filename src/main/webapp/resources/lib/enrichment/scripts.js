@@ -16,6 +16,13 @@ $(document).ready(function () {
   }
 
   var setEservice = function(eServiceId) {
+    
+    $("*[id^='tae-']").html('');
+    $("*[id^='ctz-']").html('');
+    $("*[id^='wae-']").html('');
+    $("*[id^='cdv-']").html('');
+    $("*[id^='sessions-']").html('');	  
+	  
     // Get real data
     // Ctzpedia stats
     getCtzQuestions(ctzURL, eServiceId);
@@ -80,6 +87,7 @@ function fillEservices(id, cb) {
 	var select = $('#eservices');
     var first = null;
     select.find('option').remove();
+    
     procedure.phases.forEach(function (phase) {
       if (phase.eServiceId == null) return;
       
@@ -207,115 +215,4 @@ function getSatisfaction(eservice){
 	  });
 }
 
-// Satisfactions
-function getSatisfactionOld (url) {
-  // Considerating every simplification: paragraph, sentence and word
-  // Values from -5 to 5 -> -5 = 0%, 0 = 50%, 5 = 100%
-  // TODO: This should be done server side
-  $.get(url+'/logs/find?words=session-feedback', function (data) {
-    var simpCount = 0;
-    var ctzCount = 0;
-    var averageWordsCount = 0;
-    
-    var paragraphSatisf = 0;
-    var phraseSatisf = 0;
-    var wordSatisf = 0;
-    var ctzSatisf = 0;
-    var wordsComments = 0;
-    data.results.forEach(function (doc) {
-      if (doc.data.slider_session_feedback_paragraph !== undefined) {
-        paragraphSatisf += parseInt(doc.data.slider_session_feedback_paragraph);
-        phraseSatisf += parseInt(doc.data.slider_session_feedback_phrase);
-        wordSatisf += parseInt(doc.data.slider_session_feedback_word);
-        simpCount++;
-      }
-      
-      if (doc.data.slider_session_feedback_ctz !== undefined) {
-        ctzSatisf += parseInt(doc.data.slider_session_feedback_ctz) + 5; // [-5,5] to [0-10]
-        ctzCount++;
-      }
-      
-      // average number of words in comments
-      if (doc.data["session-feedback-comments-text"] !== undefined) {
-        var wordsArr = doc.data["session-feedback-comments-text"].split(" ");
-        wordsComments += wordsArr.length;
-        averageWordsCount++;
-        
-      }
-      if (doc.data["session-feedback-timeout-text"] !== undefined) {
-        var wordsArr = doc.data["session-feedback-timeout-text"].split(" ");
-        wordsComments += wordsArr.length;
-        averageWordsCount++;
-      }
-    });
-    
-    var totalSimpSatisf = (paragraphSatisf + phraseSatisf + wordSatisf) / (simpCount*3);
-    totalSimpSatisf = totalSimpSatisf * 100; // Percentage
-    totalSimpSatisf = Math.round(totalSimpSatisf * 100) / 100 // 2 decimals only
-    var progressbarSimpl = $('#bar-simpl-satisfaction');
-    progressbarSimpl.html(totalSimpSatisf + "%");
-    progressbarSimpl.css('width', totalSimpSatisf + "%");
-    percentageChangeClass(progressbarSimpl, totalSimpSatisf);
-    
-    var totalCtzSatisf = (ctzSatisf*10) / ctzCount; // *10 to get the percentage
-    totalCtzSatisf = Math.round(totalCtzSatisf * 100) / 100 // 2 decimals only
-    var progressbarCtz = $('#bar-ctz-satisfaction');
-    progressbarCtz.html(totalCtzSatisf + "%");
-    progressbarCtz.css('width', totalCtzSatisf + "%");
-    percentageChangeClass(progressbarCtz, totalCtzSatisf);
-    
-    // TODO: Or do it with the faces from the feedback
-    var globalSatisf = (totalSimpSatisf + totalCtzSatisf) / 2;
-    globalSatisf = Math.round(globalSatisf * 100) / 100 // 2 decimals only
-    var progressbarGlobal = $('#bar-global-satisfaction');
-    progressbarGlobal.html(globalSatisf + "%");
-    progressbarGlobal.css('width', globalSatisf + "%");
-    percentageChangeClass(progressbarGlobal, globalSatisf);
-    
-    // Average number of words
-    var averageTotal = wordsComments / averageWordsCount;
-    averageTotal = Math.round(averageTotal * 100) / 100 // 2 decimals only
-    $('#averageWords').html(averageTotal);
-    
-    // Simplification stats -> number of times simplification was used == number of feedbacks with simplification form
-    $('#simpl-1').html(simpCount);
-    $('#simpl-2').html(0); // No data available
-    $('#simpl-3').html(0); // No data available
-    $('#simpl-4').html(0); // No data available
-  });
-}
-
-// Averages
-function getAverages (url) {
-  $.get(url+'/logs/find?words=duration', function (data) {
-    var count = data.count;
-    var totalDuration = 0;
-    data.results.forEach(function (doc) {
-      totalDuration += doc.data.duration; // ms
-    });
-    
-    totalDuration = (totalDuration / 1000) / count;
-    totalDuration = Math.round(totalDuration * 100) / 100 // 2 decimals only
-    if (totalDuration > 120) { // if more than 120 seconds, show it in minutes
-      totalDuration = totalDuration / 60;
-      totalDuration = Math.round(totalDuration * 100) / 100 // 2 decimals only
-      $('#averageTime').html(totalDuration + " min");
-    } else {
-      $('#averageTime').html(totalDuration + " sec");
-    }
-  });
-}
-
-function percentageChangeClass (elem, percentage) {
-  if (percentage < 30) {
-    elem.removeClass();
-    elem.addClass('progress-bar progress-bar-danger');
-  } else if (percentage >= 30 && percentage < 70) {
-    elem.removeClass();
-    elem.addClass('progress-bar progress-bar-info');
-  } else {
-    elem.removeClass();
-    elem.addClass('progress-bar progress-bar-success');
-  }
-}
 
