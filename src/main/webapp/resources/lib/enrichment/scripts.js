@@ -18,17 +18,16 @@ $(document).ready(function () {
       console.log(exception);
     });
   
-  fillEservices(cpdURL, function (service) {
+  fillEservices(cpdURL, function (serviceId) {
     // Fill the info with the first eservice returned
-    var id = service.id;
-    getSVGImage(cpdURL, id);
+    getSVGImage(cpdURL, serviceId);
     // Get real data
     //Satisfaction
     getSatisfaction(globalURL);
     // Averages
     getAverages(globalURL);
     // Ctzpedia stats
-    getCtzQuestions(ctzURL, id);
+    getCtzQuestions(ctzURL, serviceId);
   });
   
   // Select function when eservice changes
@@ -50,8 +49,8 @@ function fillEservices(cpdURL, cb) {
     var select = $('#eservices');
     var first;
     data.forEach(function (service) {
-      if (first == null) first = service;
-      select.append($('<option></option').val(service.id).html(service.name));
+      if (first == null) first = service.phases[0].eServiceId;
+      select.append($('<option></option').val(service.phases[0].eServiceId).html(service.name));
       // Cache the service in the global variable
       eservices.push(service);
     });
@@ -61,7 +60,7 @@ function fillEservices(cpdURL, cb) {
 
 function getSVGImage (cpdURL, eserviceId) {
   $.each(eservices, function (index, service) {
-    if (service.id == eserviceId) {
+    if (service.phases[0].eServiceId == eserviceId) {
       // Set image's source url
       $('#svg-eservice').attr("src", service.svg);
     }
@@ -180,7 +179,7 @@ function getAverages (url) {
 
 // Stats
 function getCtzQuestions (url, eservice) {
-  $.get(url+'/questions/'+eservice, function (data) {
+  $.get(url+'/stats/questions/'+eservice, function (data) {
     $('#ctz-questions-1').html(data);
     $('#ctz-questions-2').html(0); // No data available
     $('#ctz-questions-3').html(0); // No data available

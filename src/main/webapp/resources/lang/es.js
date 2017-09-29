@@ -65,5 +65,11 @@ window.SwaggerTranslator.learn({
     "Media de palabras en comentarios": "Media de palabras en comentarios",
     "palabras": "palabras",
     "Cambiar a datos reales": "Cambiar a datos reales",
-    "Cambiar a datos de prueba": "Cambiar a datos de prueba"
+    "Cambiar a datos de prueba": "Cambiar a datos de prueba",
+    
+    "Enrichment engine data": "Enrichment engine data",
+    "Welcome!": "Bienvenido!",
+    "View enrichment engine data": "Ver datos del Enrichment engine",
+    "Logout": "Cerrar sesión",
+    "Enrichment engine data": "Datos enrichment engine"
 });
